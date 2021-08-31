@@ -1,10 +1,11 @@
 package com.example.projects;
 
-import com.example.projects.entities.ChannelInfo;
+import com.example.projects.entities.Channel;
 import com.example.projects.entities.Subscription;
 import com.example.projects.entities.Teams;
 import com.example.projects.entities.WebPush;
 import com.example.projects.entities.enums.ChannelEnum;
+import com.example.projects.repositories.ChannelRepository;
 import com.example.projects.repositories.SubscriptionRepository;
 import com.example.projects.repositories.TeamsRepository;
 import com.example.projects.repositories.WebPushRepository;
@@ -21,37 +22,44 @@ public class Seed implements CommandLineRunner {
     private final TeamsRepository teamsRepository;
     private final WebPushRepository webPushRepository;
     private final SubscriptionRepository subscriptionRepository;
+    private final ChannelRepository channelRepository;
 
     @Override
     public void run(String... args) {
         log.info("Seeding");
         String userId = "1";
+        String event = "CREATE_NOMINATION";
 
-        val teamsInfo = new ChannelInfo();
-        teamsInfo.setName(ChannelEnum.TEAMS);
+        val teamsChannel = new Channel();
+        teamsChannel.setName(ChannelEnum.TEAMS);
+
+        val webPushChannel = new Channel();
+        webPushChannel.setName(ChannelEnum.WEB_PUSH);
+
+        val savedTeamsChannel = channelRepository.save(teamsChannel);
+        val savedWebPushChannel = channelRepository.save(webPushChannel);
 
         val teams = new Teams();
-        teams.setChannelInfo(teamsInfo);
         teams.setWebhook("webhook");
+        teams.setChannel(savedTeamsChannel);
         teamsRepository.save(teams);
 
-        val webPushInfo = new ChannelInfo();
-        webPushInfo.setName(ChannelEnum.WEB_PUSH);
-
         val webPush = new WebPush();
-        webPush.setChannelInfo(webPushInfo);
         webPush.setPlayerId("Player 123");
         webPush.setUserId(userId);
+        webPush.setChannel(savedWebPushChannel);
         webPushRepository.save(webPush);
 
         val subscriptionPerTeams = new Subscription();
-        subscriptionPerTeams.setTeams(teams);
+        subscriptionPerTeams.setChannel(savedTeamsChannel);
         subscriptionPerTeams.setUserId(userId);
+        subscriptionPerTeams.setEvent(event);
         subscriptionRepository.save(subscriptionPerTeams);
 
         val subscriptionPerWebPush = new Subscription();
-        subscriptionPerWebPush.setWebPush(webPush);
+        subscriptionPerWebPush.setChannel(savedWebPushChannel);
         subscriptionPerWebPush.setUserId(userId);
+        subscriptionPerWebPush.setEvent(event);
         subscriptionRepository.save(subscriptionPerWebPush);
     }
 }

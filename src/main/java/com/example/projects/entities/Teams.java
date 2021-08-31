@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,6 +19,8 @@ public class Teams {
     @Column
     private String webhook;
 
-    @Embedded
-    private ChannelInfo channelInfo;
+    @ManyToOne
+    @JoinColumn(name = "channelId")
+    private Channel channel;
+
 }

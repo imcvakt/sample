@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,6 +22,7 @@ public class WebPush {
     @Column
     private String userId;
 
-    @Embedded
-    private ChannelInfo channelInfo;
+    @ManyToOne
+    @JoinColumn(name = "channelId")
+    private Channel channel;
 }
