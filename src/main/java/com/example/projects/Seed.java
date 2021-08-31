@@ -45,13 +45,11 @@ public class Seed implements CommandLineRunner {
         webPushRepository.save(webPush);
 
         val subscriptionPerTeams = new Subscription();
-        subscriptionPerTeams.setChannel(ChannelEnum.TEAMS);
         subscriptionPerTeams.setTeams(teams);
         subscriptionPerTeams.setUserId(userId);
         subscriptionRepository.save(subscriptionPerTeams);
 
         val subscriptionPerWebPush = new Subscription();
-        subscriptionPerWebPush.setChannel(ChannelEnum.WEB_PUSH);
         subscriptionPerWebPush.setWebPush(webPush);
         subscriptionPerWebPush.setUserId(userId);
         subscriptionRepository.save(subscriptionPerWebPush);

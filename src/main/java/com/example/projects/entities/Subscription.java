@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -25,10 +26,16 @@ public class Subscription {
     private WebPush webPush;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    private ChannelEnum channel;
-
-    @Column
     private String userId;
+
+    public ChannelEnum getChannel() {
+        if (!Objects.isNull(webPush)) {
+            return ChannelEnum.WEB_PUSH;
+        }
+        if (!Objects.isNull(teams)) {
+            return ChannelEnum.TEAMS;
+        }
+        return null;
+    }
 
 }
