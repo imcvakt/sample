@@ -17,6 +17,9 @@ public class Subscription {
     @Column
     private Long id;
 
+    // another alternative would be mapping a @Column Long channelId,
+    // creating and fill channelType according to the channel when creating a subscription
+
     @ManyToOne
     @JoinColumn(name = "teamsId")
     private Teams teams;
