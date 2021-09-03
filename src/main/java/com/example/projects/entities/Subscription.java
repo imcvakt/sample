@@ -1,28 +1,42 @@
 package com.example.projects.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.example.projects.entities.enums.SubscriptionTypeEnum;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Subscription {
 
     @Id
     @GeneratedValue
-    @Column
+    @Column(name = "SUB_ID")
     private Long id;
 
-    @Column
+    @Column(name = "SUB_DISPLAY_NAME")
+    private String displayName;
+
+    @Column(name = "SUB_TYPE")
+    @Enumerated(EnumType.STRING)
+    private SubscriptionTypeEnum type;
+
+    @Column(name = "SUB_SUBSCRIBED")
+    private boolean subscribed;
+
+    @Column(name = "USR_ID")
     private String userId;
 
-    @Column
-    private String event;
+    @Column(name = "SUB_LEGAL_ENTITY_ID")
+    private String legalEntityId;
 
-    @ManyToOne
-    @JoinColumn(name = "channelId")
-    private Channel channel;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "SUB_ID", nullable = false)
+    private List<SubscriptionItem> items;
 
 }

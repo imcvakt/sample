@@ -1,9 +1,10 @@
 package com.example.projects.repositories;
 
-import com.example.projects.entities.WebPush;
+import com.example.projects.entities.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WebPushRepository extends JpaRepository<WebPush, Long> {
+public interface EventRepository extends JpaRepository<Event, Long> {
+    Event findEventByName(String name);
 }
